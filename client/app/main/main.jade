@@ -11,4 +11,9 @@
 
   h3 World
 
+  h3 Globals
+  div(ng-repeat='global in globals')
+    h5 {{global.name}}
+    span {{global.value}}
+
 footer

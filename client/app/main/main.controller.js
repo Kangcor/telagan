@@ -30,6 +30,25 @@ class MainController {
 
     $scope.world = {};
 
+    $scope.globals = {
+    	loops: {
+    		name: 'loops',
+    		value: 0
+    	},
+    	currentDay: {
+    		name: 'currentDay',
+    		value: 0
+    	},
+    	currentMonth: {
+    		name: 'currentMonth',
+    		value: 0
+    	},
+    	totalDays: {
+    		name: 'totalDays',
+    		value: 0
+    	}
+    };
+
     $scope.generateResource = function(name) {
     	$scope.human.workingAt = name;
     	if($scope.resources[name].current < $scope.resources[name].max) {
@@ -45,15 +64,27 @@ class MainController {
     	}
     }
 
+    function updateGlobals() {
+    	$scope.globals.loops.value++;
+    	if ($scope.globals.loops.value > 10) {
+    		$scope.globals.loops.value = 0;
+    		$scope.globals.totalDays.value++;
+    		$scope.globals.currentDay.value++;
+    		if ($scope.globals.currentDay.value > 30) {
+    			$scope.globals.currentDay.value = 0;
+    			$scope.globals.currentMonth.value++;
+    		}
+    	}
+    }
+
     var gameLoop = function() {
+    	updateGlobals();
     	humanWork();
     	
     };
 
-    // Run UI update code every 10ms
     $interval(function() {
     	gameLoop();
-      
     }, 100);
 
     
