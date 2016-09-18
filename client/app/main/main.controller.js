@@ -30,6 +30,16 @@ class MainController {
 
     $scope.world = {};
 
+    $scope.items = {
+    	upgradeEnergy: {
+    		name: 'upgradeEnergy',
+    		cost: {
+    			resource: 'money',
+    			value: 5
+    		}
+    	}
+    };
+
     $scope.globals = {
     	loops: {
     		name: 'loops',
@@ -79,7 +89,7 @@ class MainController {
 
     var gameLoop = function() {
     	updateGlobals();
-    	humanWork();
+    //	humanWork();
     	
     };
 

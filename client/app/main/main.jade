@@ -1,19 +1,35 @@
 .container-fluid
-  h3 Current resources:
-  table.table-condensed
-    tr(ng-repeat='resource in resources')
-      td {{resource.name}}
-      td {{resource.current}}/{{resource.max}}
-    
-  h3 Generators
-  div(ng-repeat='resource in resources')
-    button.btn.btn-default(ng-click='generateResource(resource.name)' ng-disabled="resource.current >= resource.max") Generate {{resource.name}}
+  .row
+    .col-xs-2
+      h3 Current resources:
+      table.table-condensed
+        tr(ng-repeat='resource in resources')
+          td {{resource.name}}
+          td {{resource.current}}/{{resource.max}}
+        
+      h3 Generators
+      div(ng-repeat='resource in resources')
+        button.btn.btn-default(ng-click='generateResource(resource.name)' ng-disabled='resource.current >= resource.max') Generate {{resource.name}}
 
-  h3 World
+      h3 World
 
-  h3 Globals
-  div(ng-repeat='global in globals')
-    h5 {{global.name}}
-    span {{global.value}}
+      h3 Globals
+      div(ng-repeat='global in globals')
+        h5 {{global.name}}
+        span {{global.value}}
+
+    .col-xs-10
+      h3 Store
+      table.table-condensed
+        tr
+          th Name
+          th Cost (unit)
+        tr(ng-repeat='item in items')
+          td {{item.name}}
+          td {{item.cost.value}} {{item.cost.resource}}
+          td
+            button.btn.btn-default(ng-click='buyItem(item.name)' ng-disabled='canBuy(item.name)') Buy
+
+      h3 Inventory
 
 footer
