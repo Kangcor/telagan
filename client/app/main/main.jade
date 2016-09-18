@@ -1,0 +1,14 @@
+.container-fluid
+  h3 Current resources:
+  table.table-condensed
+    tr(ng-repeat='resource in resources')
+      td {{resource.name}}
+      td {{resource.current}}/{{resource.max}}
+    
+  h3 Generators
+  div(ng-repeat='resource in resources')
+    button.btn.btn-default(ng-click='generateResource(resource.name)' ng-disabled="resource.current >= resource.max") Generate {{resource.name}}
+
+  h3 World
+
+footer
