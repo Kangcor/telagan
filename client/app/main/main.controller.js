@@ -37,22 +37,56 @@ class MainController {
     	workingAt: null
     };
 
-    $scope.world = {};
+    $scope.world = {
+      rotationPeriod: 24,
+      translationPeriod: 365,
+    };
 
     $scope.items = {
-    	upgradeEnergy: {
-    		name: 'upgradeEnergy',
+    	energySlot: {
+    		name: 'energySlot',
+        showName: 'Energy Slot',
     		cost: [
           {
       			resource: 'money',
-      			value: 5
+      			value: 2
 	        },
           {
             resource: 'food',
             value: 3
           }
-        ]
-    	}
+        ],
+        effect: {
+          description: 'Add a new slot of energy',
+          update: {
+            resource: 'energy',
+            parameter: 'slots',
+            amount: 1
+          }
+        }
+    	},
+      energyCapacity: {
+        name: 'energyCapacity',
+        showName: 'Energy Capacity',
+        cost: [
+          {
+            resource: 'money',
+            value: 2
+          },
+          {
+            resource: 'food',
+            value: 3
+          }
+        ],
+        effect: {
+          description: 'Add 5 units more of capacity',
+          update: {
+            resource: 'energy',
+            parameter: 'capacity',
+            amount: 5
+          }
+        }
+      }
     };
 
     $scope.globals = {
@@ -60,12 +94,12 @@ class MainController {
     		name: 'loops',
     		value: 0
     	},
+      currentHour: {
+        name: 'currentHour',
+        value: 0
+      },
     	currentDay: {
     		name: 'currentDay',
-    		value: 0
-    	},
-    	currentMonth: {
-    		name: 'currentMonth',
     		value: 0
     	},
     	totalDays: {
@@ -86,11 +120,11 @@ class MainController {
       if ($scope.canBuy(item)) { // Double check
         item.cost.forEach(elem => $scope.resources[elem.resource].current -= elem.value);
         console.log('purchase complete');
+        $scope.resources[item.effect.update.resource].storage[item.effect.update.parameter] += item.effect.update.amount;
       }
     };
 
     $scope.generateResource = function(name) {
-    	$scope.human.workingAt = name;
     	if($scope.resources[name].current < $scope.getMaxStorage(name)) {
 	    	$scope.resources[name].current += 1;
     	}
@@ -116,19 +150,21 @@ class MainController {
     	$scope.globals.loops.value++;
     	if ($scope.globals.loops.value > 10) {
     		$scope.globals.loops.value = 0;
-    		$scope.globals.totalDays.value++;
-    		$scope.globals.currentDay.value++;
-    		if ($scope.globals.currentDay.value > 30) {
-    			$scope.globals.currentDay.value = 0;
-    			$scope.globals.currentMonth.value++;
-    		}
+        $scope.globals.currentHour.value++;
+        if ($scope.globals.currentHour.value >= $scope.world.rotationPeriod) {
+          $scope.globals.totalDays.value++;
+          $scope.globals.currentDay.value++;
+          if ($scope.globals.currentDay.value > 30) {
+            $scope.globals.currentDay.value = 0;
+            $scope.globals.currentMonth.value++;
+          }  
+        }
     	}
     }
 
     var gameLoop = function() {
     	updateGlobals();
     	humanWork();
-    	
     };
 
     $interval(function() {
