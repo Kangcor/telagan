@@ -5,11 +5,12 @@
       table.table-condensed
         tr(ng-repeat='resource in resources')
           td {{resource.name}}
-          td {{resource.current}}/{{resource.max}}
+          td {{resource.current}}/{{getMaxStorage(resource.name)}}
         
       h3 Generators
-      div(ng-repeat='resource in resources')
-        button.btn.btn-default(ng-click='generateResource(resource.name)' ng-disabled='resource.current >= resource.max') Generate {{resource.name}}
+      .btn-group(ng-repeat='resource in resources')
+        button.btn.btn-default(ng-click='generateResource(resource.name)' ng-disabled='resource.current >= getMaxStorage(resource.name)') Generate {{resource.name}}
+        button.btn.btn-default(ng-click='assignHumanWork(resource.name)' ng-class="{ 'active': isHumanWorkingAt(resource.name) }") Work
 
       h3 World
 
@@ -28,7 +29,7 @@
           td {{item.name}}
           td {{item.cost.value}} {{item.cost.resource}}
           td
-            button.btn.btn-default(ng-click='buyItem(item.name)' ng-disabled='canBuy(item.name)') Buy
+            button.btn.btn-default(ng-click='buyItem(item)' ng-disabled='!canBuy(item)') Buy
 
       h3 Inventory
 

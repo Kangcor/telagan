@@ -10,17 +10,26 @@ class MainController {
     	energy: {
     		name: 'energy',
     		current: 0,
-    		max: 10
+        storage: {
+          capacity: 5,
+          slots: 2
+        }
     	},
     	money: {
     		name: 'money',
     		current: 0,
-    		max: 10
+    		storage: {
+          capacity: 5,
+          slots: 2
+        }
     	},
     	food: {
     		name: 'food',
     		current: 0,
-    		max: 10
+    		storage: {
+          capacity: 5,
+          slots: 2
+        }
     	},
     };
 
@@ -33,10 +42,16 @@ class MainController {
     $scope.items = {
     	upgradeEnergy: {
     		name: 'upgradeEnergy',
-    		cost: {
-    			resource: 'money',
-    			value: 5
-    		}
+    		cost: [
+          {
+      			resource: 'money',
+      			value: 5
+	        },
+          {
+            resource: 'food',
+            value: 3
+          }
+        ]
     	}
     };
 
@@ -59,16 +74,39 @@ class MainController {
     	}
     };
 
+    $scope.getMaxStorage = function(resource) {
+      return $scope.resources[resource].storage.capacity * $scope.resources[resource].storage.slots;
+    }
+
+    $scope.canBuy = function(item) {
+      return item.cost.every(elem => $scope.resources[elem.resource].current >= elem.value);
+    };
+
+    $scope.buyItem = function(item) {
+      if ($scope.canBuy(item)) { // Double check
+        item.cost.forEach(elem => $scope.resources[elem.resource].current -= elem.value);
+        console.log('purchase complete');
+      }
+    };
+
     $scope.generateResource = function(name) {
     	$scope.human.workingAt = name;
-    	if($scope.resources[name].current < $scope.resources[name].max) {
+    	if($scope.resources[name].current < $scope.getMaxStorage(name)) {
 	    	$scope.resources[name].current += 1;
     	}
     };
     
+    $scope.isHumanWorkingAt = function(name) {
+      return $scope.human.workingAt === name;
+    };
+
+    $scope.assignHumanWork = function(name) {
+      $scope.human.workingAt = name;
+    };
+
     function humanWork() {
     	if($scope.human.workingAt) {
-    		if($scope.resources[$scope.human.workingAt].current < $scope.resources[$scope.human.workingAt].max) {
+    		if($scope.resources[$scope.human.workingAt].current < $scope.getMaxStorage($scope.human.workingAt)) {
 	    		$scope.resources[$scope.human.workingAt].current += 1;
 	    	}
     	}
@@ -89,7 +127,7 @@ class MainController {
 
     var gameLoop = function() {
     	updateGlobals();
-    //	humanWork();
+    	humanWork();
     	
     };
 
