@@ -20,10 +20,66 @@ function draw()
 		nanobot_panel();
 		consola_panel();
 		radar_panel();
+		energy_wires();
 
 }
 
+function energy_wires()
+{
+	// to radar
+	ctx.beginPath();
+	ctx.lineWidth=4;
+	ctx.strokeStyle = colors[3];
+	ctx.setLineDash([2,6]);
+	ctx.lineDashOffset = radar_angle%8;
+	ctx.moveTo(260,500);
+	ctx.lineTo(290,450);
+	ctx.lineTo(400,450);
+	ctx.stroke();
 
+	ctx.beginPath();
+	ctx.moveTo(265,500);
+	ctx.lineTo(295,455);
+	ctx.lineTo(400,455);
+	ctx.stroke();
+
+	ctx.beginPath();
+	ctx.moveTo(270,500);
+	ctx.lineTo(300,460);
+	ctx.lineTo(400,460);
+	ctx.stroke();
+
+	// to console
+	ctx.beginPath();
+	ctx.moveTo(750,550);
+	ctx.lineTo(750,510);
+	ctx.stroke();
+	ctx.beginPath();
+	ctx.moveTo(755,550);
+	ctx.lineTo(755,510);
+	ctx.stroke();
+	ctx.beginPath();
+	ctx.moveTo(760,550);
+	ctx.lineTo(760,510);
+	ctx.stroke();
+
+	// to nanobots
+	ctx.beginPath();
+	ctx.moveTo(820,350);
+	ctx.lineTo(780,310);
+	ctx.stroke();
+	ctx.beginPath();
+	ctx.moveTo(755,550);
+	ctx.lineTo(755,510);
+	ctx.stroke();
+	ctx.beginPath();
+	ctx.moveTo(760,550);
+	ctx.lineTo(760,510);
+	ctx.stroke();
+
+
+	ctx.setLineDash([]);
+}
 
 function radar_panel()
 {
