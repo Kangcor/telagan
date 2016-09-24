@@ -18,7 +18,45 @@ function draw()
 		background();
 		power_panel();
 		nanobot_panel();
+		consola_panel();
+		radar_panel();
 
+}
+
+
+
+function radar_panel()
+{
+	var ppanel = {};
+	ppanel.x = 3;
+	ppanel.y = 50;
+	panel(ppanel.x,ppanel.y,34,25,5,2);
+	//panel(ppanel.x+0.5,ppanel.y+0.5,29,19,5,1);
+	ctx.beginPath();
+	ctx.lineWidth=8;
+	ctx.strokeStyle = colors[3];
+	ctx.arc(options.snap*ppanel.x+170,options.snap*ppanel.y+125,115,0,2 * Math.PI);
+	ctx.stroke();
+	ctx.fillStyle =colors[0];
+	ctx.fill();
+	// agulla
+	ctx.beginPath();
+	ctx.lineWidth=4;
+	ctx.strokeStyle = colors[3];
+	ctx.setLineDash([]);
+	ctx.moveTo(options.snap*ppanel.x+170,options.snap*ppanel.y+125);
+	var size = 110;
+	ctx.lineTo((options.snap*ppanel.x+170)+ size * Math.cos(radar_angle/2/Math.PI),(options.snap*ppanel.y+125)+ size * Math.sin(radar_angle/2/Math.PI));
+	ctx.stroke();
+}
+
+function consola_panel()
+{
+	var ppanel = {};
+	ppanel.x = 40;
+	ppanel.y = 55;
+	panel(ppanel.x,ppanel.y,38,20,5,2);
+	panel(ppanel.x+0.5,ppanel.y+0.5,29,19,5,1);
 }
 
 function nanobot_panel()
@@ -70,16 +108,16 @@ function nanobot_panel()
 
 	// transformation_
 	var numberOfSides = 14 - (Math.floor(4+(step_transf/30)));
-    size = 20,
+    size = 10,
     Xcenter = 80+(ppanel.x*options.snap)+step_transf;
-    Ycenter = 170+(ppanel.y*options.snap);
+    Ycenter = 190+(ppanel.y*options.snap);
  
 	ctx.beginPath();
 	ctx.setLineDash([]);
-	ctx.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));          
+	ctx.moveTo (Xcenter +  size * Math.cos(0.8), Ycenter +  size *  Math.sin(0.8));          
 	 
 	for (var i = 1; i <= numberOfSides;i += 1) {
-	    ctx.lineTo (Xcenter + size * Math.cos(i * 2 * Math.PI / numberOfSides), Ycenter + size * Math.sin(i * 2 * Math.PI / numberOfSides));
+	    ctx.lineTo (Xcenter + size * Math.cos(0.8+(i * 2 * Math.PI / numberOfSides)), Ycenter + size * Math.sin(0.8+(i * 2 * Math.PI / numberOfSides)));
 	}
 	 
 	ctx.strokeStyle =colors[3];
@@ -144,7 +182,7 @@ function power_panel()
 
 function power_cell(i,j, offx, offy)
 {
-	var power = Math.random()*4;
+	var power = 3+Math.random()*1;
 	panel(offx+6+(i*7),offy+3+(j*7),5,6,5,3);
 	panel(offx+6.5+(i*7),offy+3.5+(j*7),4,5,5,2);
 	panel(offx+6.5+(i*7),offy+3.5+power+(j*7),4,5-power,5,3);
@@ -155,7 +193,7 @@ function background()
 	ctx.setLineDash([0]);
 	ctx.lineWidth=2;
 	ctx.strokeStyle = colors[0];
-	panel(0,0,120,80,5,1);
+	panel(0,0,120,80,5,0);
 }
 
 
@@ -207,6 +245,7 @@ function panel(x,y,width,height,radius, fill, stroke)
 
 var step = 0;
 var step_transf = 0;
+var radar_angle = 0;
 
 setInterval(function() {
 	draw();
@@ -214,4 +253,6 @@ setInterval(function() {
 	step = step%20;
 	step_transf  +=5;
 	step_transf = step_transf%200;
+	radar_angle++;
+	radar_angle = radar_angle%360;
 },100);
